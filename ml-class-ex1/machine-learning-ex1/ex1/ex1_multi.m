@@ -50,7 +50,6 @@ pause;
 fprintf('Normalizing Features ...\n');
 
 [X mu sigma] = featureNormalize(X);
-
 % Add intercept term to X
 X = [ones(m, 1) X];
 
@@ -75,7 +74,7 @@ X = [ones(m, 1) X];
 %
 % Hint: By using the 'hold on' command, you can plot multiple
 %       graphs on the same figure.
-%
+% 
 % Hint: At prediction, make sure you do the same feature normalization.
 %
 
@@ -133,6 +132,7 @@ fprintf('Solving with normal equations...\n');
 data = csvread('ex1data2.txt');
 X = data(:, 1:2);
 y = data(:, 3);
+
 m = length(y);
 
 % Add intercept term to X
