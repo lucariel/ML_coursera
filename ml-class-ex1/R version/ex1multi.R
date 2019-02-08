@@ -52,7 +52,6 @@ gradientDescent(X,y,theta,0.01, 1500)
 ##Normal equation
 #theta = pinv((X'*X))*X'*y
 #install.packages("matlib")
-library(matlib)
 theta<-as.vector(solve((t(X)%*%X))%*%t(X)%*%y)
 costFunction(X, y, theta)
 
