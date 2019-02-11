@@ -31,7 +31,7 @@ J = (1/m)*sum(l);
 %A vectorized implementation is:
 %θ:=θ−m
 %α​XT(g(Xθ)−y)
-grad = grad + X'*(h-y) ;
+grad = grad +  X'*(h-y) ;
 grad = 1/m*grad
 
 % =============================================================

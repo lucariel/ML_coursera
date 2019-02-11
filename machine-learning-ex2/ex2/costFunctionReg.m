@@ -17,11 +17,26 @@ grad = zeros(size(theta));
 %               Compute the partial derivatives and set grad to the partial
 %               derivatives of the cost w.r.t. each parameter in theta
 
+%reg parameter
+%ld = 0;
+%or i = 2:length(theta)
+%ld = ld + theta(i)^2;
+%end
+%ld = ld * (lambda/2*m);
 
+h = sigmoid(X*theta);
+J = 1/m*(-y'*log(h)-(1-y)'*log(1-h))+lambda/2/m*theta(2:end)'*theta(2:end);
 
-
-
-
+%gradient
+%%NORMAL EQ
+%f = eye(size(X)(2));
+%f(1,1)=0;
+%grad = grad + pinv(X'*X +lambda*f)*X'*y;
+%grad = 1/m*grad;
+grad = grad + X'*(h-y)/m+lambda*theta/m;
+grad(1) = grad(1) - lambda*theta(1)/m
+J
+grad
 % =============================================================
 
 end
