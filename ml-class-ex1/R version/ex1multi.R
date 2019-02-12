@@ -47,6 +47,7 @@ gradientDescent<-function(X, y, theta, alpha, num_iter){
   costFunction(X, y, theta)
   }
 
+
 gradientDescent(X,y,theta,0.01, 1500)
 
 ##Normal equation
