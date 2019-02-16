@@ -5,7 +5,7 @@ library(ggplot2)
 data <- read.delim("ex1data1.txt", header = F, sep = ",")
 data%>%ggplot(aes(x = V1, y = V2))+
   geom_point(shape = 4, color = "red")+
-  labs(x = "Population of Cityin 10,000s", y = "Profit in $10,000s")+
+  labs(x = "Population of Cityin 10,000s", y = "Profit in $10,000s")
   
 ## Getting proper X matrix
 colnames(data)<-c("population", "profit")

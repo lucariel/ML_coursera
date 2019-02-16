@@ -36,7 +36,7 @@ costFunction_lg(theta, X, y)
 
 gradientDescent<-function(X, y, theta, alpha, num_iter){
   control<- costFunction_lg(theta, X, y)
-  
+  m <- length(y)
   for(i in 1:num_iter){
     h <- sigmoid(X%*%theta)
     theta<- theta-(alpha/m)*t(X)%*%(h-y)
@@ -46,6 +46,6 @@ gradientDescent<-function(X, y, theta, alpha, num_iter){
 
 }
 
-gradientDescent(X,y,theta, 0.005, 500000)
+gradientDescent(X,y,theta, 0.005, 10)
 
 

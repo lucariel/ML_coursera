@@ -18,6 +18,8 @@ head(X,2)
 y = as.vector(data[,3])
 theta<-as.vector(rbind(0,0,0))
 
+
+
 ##Normalization features
 X[,2] <- (X[,2]-mean(X[,2]))/sd(X[,2])
 y <- (y-mean(y))/sd(y)
