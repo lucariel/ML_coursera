@@ -34,9 +34,10 @@ sigmoid <- function(z){
 }
 
 costFunction_lg<- function(theta, X, y){
+  eps<- 1e-5
   m <- length(y)
   h <- sigmoid(X%*%theta)
-  l <- (1/m)*((-t(y)%*%log(h))-(t(1-y)%*%log(1-h)))  
+  l <- (1/m)*((-t(y)%*%log(h))-(t(1-y)%*%log(1-h+eps)))  
   return(l)
 }
 
