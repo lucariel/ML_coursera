@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[209]:
+# In[79]:
 
 
 #Logistic Regression Python
@@ -10,22 +10,24 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import math
+from sklearn import svm
 
 
-# In[3]:
+# In[37]:
 
 
 ##Preparing Data (1)
 path = os.getcwd()+"/Documents/ML Coursera/ml-class-ex1/ex1/Python-Version/"
 column_names =  ['exam1','exam2','accepted']
 data = pd.read_csv('ex2data1.txt', sep=",", header=None, names = column_names)
-data['x0'] = 1
+data_plt = data
 
 
-# In[35]:
+# In[38]:
 
 
 ##Preparing Data (1) {Initialization of variables}
+data['x0'] = 1
 X = data.iloc[:,[3,0,1]]
 y = np.array(data.iloc[:,2])
 theta = np.array([0,0,0])
@@ -33,15 +35,18 @@ iterations = 1500
 alpha = 0.01
 
 
-# In[252]:
+# In[39]:
 
 
 ##Plotting initial classes
+import seaborn as sns
+df = sns.load_dataset('iris')
+
+data = data_plt
+sns.scatterplot(data = data , x='exam1', y='exam2', hue = 'accepted')
 
 
-
-
-# In[225]:
+# In[40]:
 
 
 def sigmoid(x, derivative=False):
@@ -61,7 +66,7 @@ def costFunction(X, y, theta):
 costFunction(X, y, theta)#For initial parameters <- 0.6931471805599452 (OK)
 
 
-# In[245]:
+# In[41]:
 
 
 def gradientDescent(X, y, theta, alpha, num_iter):
@@ -84,35 +89,60 @@ def gradientDescent(X, y, theta, alpha, num_iter):
     
 
 
-# In[246]:
+# In[55]:
 
 
-theta_result = gradientDescent(X,y,theta, 0.0005, 100)["theta"];
-J_hist = gradientDescent(X,y,theta, 0.0005, 100)["J_hist"];
+#Results
+theta_result = gradientDescent(X,y,theta, 0.0005, 500000)["theta"];
+J_hist = gradientDescent(X,y,theta, 0.0005, 500000)["J_hist"];
 
 
-# In[249]:
+
+# In[49]:
 
 
 J_hist
 plt.plot(J_hist) ##Showing descending Cost over iterations
 
 
-# In[ ]:
+# In[65]:
 
 
-##Results
-gradientDescent(X,y,theta, 0.005, 500000)
+##Prediction
 
 
-# In[ ]:
+#Control Theta from Octave - Without advance optimization, takes too long
+theta_from_octave = np.array([-25.161272,0.206233,0.201470])
+
+prediction=np.round(sigmoid(np.dot(X,theta_from_octave)))
+
+1-np.sum(np.abs(prediction-y))/len(y)
+#89% Acc
 
 
-##Make predictions 
+# In[150]:
 
 
-# In[ ]:
+##Calculate m and b for Decision Boundary 
+m= (-theta_from_octave[0]/theta_from_octave[2])
+b= (-theta_from_octave[1]/theta_from_octave[2])
+
+
+# In[152]:
 
 
 ## Decision boundary
+plt.scatter(data['exam1'], data['exam2'], c = data['accepted'])
+
+
+# draw Decision boundary  line 
+plt.plot([0, (-m/b)], [m, 0], 'k-')
+
+plt.show()
+
+
+# In[ ]:
+
+
+
 
