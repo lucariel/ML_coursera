@@ -107,5 +107,5 @@ b2<- (-theta[2]/theta[3])
 
 
 data%>%ggplot()+geom_point(aes(x = exam1, y = exam2, color = accepted))+
-  geom_abline(intercept = m2, slope = b2, color = "red")+geom_abline(intercept = m1, slope = b1, color = "green")
+  geom_abline(intercept = m1, slope = b1, color = "green")
 
