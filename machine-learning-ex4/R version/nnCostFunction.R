@@ -1,15 +1,15 @@
-nnCostFunction <- function(Theta1, Theta2, 
+nnCostFunction <- function(nn_params, 
                            input_layer_size, 
                            hidden_layer_size, 
                            num_labels, 
                            X, y){
   source("aux_functions.R")
   
-  #Theta1_unrolled<-nn_params[1:(input_layer_size+1)*hidden_layer_size]
-  #Theta2_unrolled<-nn_params[(length(Theta1_unrolled)+1):length(nn_params)]
+  Theta1_unrolled_f<-nn_params[1:((input_layer_size+1)*hidden_layer_size)]
+  Theta2_unrolled_f<-nn_params[(length(Theta1_unrolled)+1):length(nn_params)]
   
-  #sTheta1<-roll_into_matrix(Theta1_unrolled, hidden_layer_size, hidden_layer_size*(input_layer_size+1))
-  #Theta2<-roll_into_matrix(Theta2_unrolled,  num_labels, num_labels*(hidden_layer_size+1))
+  Theta1<-roll_into_matrix(Theta1_unrolled_f, hidden_layer_size, hidden_layer_size*(input_layer_size+1))
+  Theta2<-roll_into_matrix(Theta2_unrolled_f,  num_labels, num_labels*(hidden_layer_size+1))
   
   #### Setting up useful variables
   m <- dim(X)[1]
