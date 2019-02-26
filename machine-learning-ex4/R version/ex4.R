@@ -1,0 +1,53 @@
+##### Neural Networks - Ex 3, Ex 4 Coursera
+library(tidyverse)
+library(R.matlab)
+###Loading data
+data<-readMat("ex4data1.mat")
+X <- data$X
+y <- as.vector(data$y)
+m <- dim(X)[1]
+###Loading Thetas
+Thetas<-readMat("ex4weights.mat")
+##Asigning for better work
+Theta1<-Thetas$Theta1
+Theta2<-Thetas$Theta2
+
+
+
+input_layer_size  <- 400 # 20x20 Input Images of Digits
+hidden_layer_size <- 25  # 25 hidden units
+num_labels <- 10         # 10 labels, from 1 to 10   
+
+########################Vizualization of Data#################################
+# get 100 random rows of X
+Xn <- X[sample(nrow(X), size=100, replace=FALSE),]
+#View(X)
+# allocate empty image matrix (200 by 200 pixels)
+Z <- matrix(rep(0, length(Xn)), nrow=200)
+
+# fill empty image matrix
+for (row in 0:9) {
+  rmin <- 1 + (row)*20
+  for (col in 0:9) {
+    cmin <- 1 + (col)*20
+    Z[rmin:(rmin+19), cmin:(cmin+19)] <- Xn[row * 10 + col + 1,]
+  }
+}
+# plot (after rotating matrix 90 degrees)
+image(t(apply(Z, 2, rev)))
+##################################End Vizualizatio##########################
+
+###Unrolling 
+Theta1_unrolled<-matrix(Theta1, ncol = 1, byrow = F)
+Theta2_unrolled<-matrix(Theta2, ncol = 1, byrow = F)
+
+nn_params<-rbind(Theta1_unrolled,Theta2_unrolled)
+
+
+##Cost Calculation 
+source("nnCostFunction.R")
+source("aux_functions.R")
+
+
+nnCostFunction(Theta1, Theta2, input_layer_size, hidden_layer_size, num_labels, 
+                 X, y)
