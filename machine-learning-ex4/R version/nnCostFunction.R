@@ -2,9 +2,11 @@ nnCostFunction <- function(nn_params,
                            input_layer_size, 
                            hidden_layer_size, 
                            num_labels, 
-                           X, y){
+                           X, y, lambda){
   source("aux_functions.R")
+
   
+  ##Roll Thetas to get back the matrix
   Theta1_unrolled_f<-nn_params[1:((input_layer_size+1)*hidden_layer_size)]
   Theta2_unrolled_f<-nn_params[(length(Theta1_unrolled)+1):length(nn_params)]
   
@@ -35,8 +37,17 @@ nnCostFunction <- function(nn_params,
   for(i in 1:m){
     Y[i,y[i]] = 1
   }
+  ##Regularization term
+  
+  #regularization = *(sum(sumsq(Theta1(:,2:end)))+sum(sumsq(Theta2(:,2:end))))
+  theta_1sq<-Theta1[1:dim(Theta1)[1],2:dim(Theta1)[2]]*Theta1[1:dim(Theta1)[1],2:dim(Theta1)[2]]
+  theta_2sq<-Theta2[1:dim(Theta2)[1],2:dim(Theta2)[2]]*Theta2[1:dim(Theta2)[1],2:dim(Theta2)[2]]
+  regularization = (lambda/(2*m))*(sum(colSums(theta_1sq))+sum(colSums(theta_2sq)))
+  
+  
   ## Cost Calculation
   eps<- 1e-5 ## To avoid log(0) == -Inf
-  J <- sum(colSums(-Y*log(h)-(1-Y)*log(1-h+eps)))/m
+  J <- sum(colSums(-Y*log(h)-(1-Y)*log(1-h+eps)))/m+regularization
   J
+  
 }

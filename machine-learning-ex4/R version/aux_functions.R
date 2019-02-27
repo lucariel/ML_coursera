@@ -15,3 +15,8 @@ sigmoid <- function(z){
   g<- 1/(1+exp(1)^(-z))
   return(g)
 }
+
+
+sigmoid_gradient<-function(z){
+  sigmoid(z)*(1-sigmoid(z))
+}
