@@ -48,6 +48,21 @@ nn_params<-rbind(Theta1_unrolled,Theta2_unrolled)
 source("nnCostFunction.R")
 source("aux_functions.R")
 
-
+##Cost with lambda = 1
 nnCostFunction(nn_params, input_layer_size, hidden_layer_size, num_labels, 
                  X, y, 1)
+
+
+
+## ================ Part 6: Initializing Pameters ================
+initial_Theta1<- randInitializeWeights(input_layer_size, hidden_layer_size)
+initial_Theta2<- randInitializeWeights(hidden_layer_size, num_labels)
+
+initial_Theta1_unrolled<-matrix(initial_Theta1, ncol = 1, byrow = F)
+initial_Theta2_unrolled<-matrix(initial_Theta2, ncol = 1, byrow = F)
+
+initial_nn_params<-rbind(initial_Theta1_unrolled,initial_Theta2_unrolled)
+
+# =============== Part 7: Implement Backpropagation ===============#
+source("checkNNGradients.R")
+checkNNGradients(1)

@@ -33,7 +33,7 @@ nnCostFunction <- function(nn_params,
   h <- a3
   
   ## y transformation into Y so that each row is an example
-  Y<- matrix(0, nrow = m, ncol = 10)
+  Y<- matrix(0, nrow = m, ncol = num_labels)
   for(i in 1:m){
     Y[i,y[i]] = 1
   }
@@ -50,4 +50,36 @@ nnCostFunction <- function(nn_params,
   J <- sum(colSums(-Y*log(h)-(1-Y)*log(1-h+eps)))/m+regularization
   J
   
+  ##
+  for(t in 1:m){
+    ########FORWARD PROPAGATION################
+    a1<-X[t,]
+    a1<-c(1,a1)
+    
+    z2<-Theta1%*%a1
+    a2<-sigmoid(z2)
+    a2<-c(1,a2)
+    
+    z3<-Theta2%*%a2
+    a3<-sigmoid(z3)
+    
+    ######Deltas#########
+    delta3<-(a3-(Y[t,]))
+    delta2<-(t(Theta2)%*%delta3)*(a2*(1-a2))
+    delta2<-delta2[2:length(delta2)]
+    
+    Theta1_grad <-  Theta1_grad + delta2%*%t(a1)
+    Theta2_grad <-  Theta2_grad + delta3%*%t(a2)
+  }
+  
+  #+ (lambda/m)*[zeros(size(Theta2, 1), 1), Theta2(:,2:end)];
+  cbind(0,Theta2)
+  Theta1_grad<-Theta1_grad/m+(lambda/m)*(cbind(0,Theta1[1:dim(Theta1)[1],2:dim(Theta1)[2]]))
+  Theta2_grad<-Theta2_grad/m+(lambda/m)*(cbind(0,Theta2[1:dim(Theta2)[1],2:dim(Theta2)[2]]))
+  
+  ##Unroll gradients
+  Theta1_grad<-matrix(Theta1_grad, ncol = 1, byrow = F)
+  Theta2_grad<-matrix(Theta2_grad, ncol = 1, byrow = F)
+  
+  list(J, list(Theta1_grad,Theta2_grad))
 }

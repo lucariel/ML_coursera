@@ -1,4 +1,4 @@
-##Auxiliar Functions###
+##Auxiliar Functions of ex4.R###
 
 
 roll_into_matrix<-function(v, i, j){
@@ -19,4 +19,18 @@ sigmoid <- function(z){
 
 sigmoid_gradient<-function(z){
   sigmoid(z)*(1-sigmoid(z))
+}
+
+
+randInitializeWeights<- function(L_in, L_out){
+  epsilon_init <- 0.12
+  W<-replicate(L_in+1, runif(L_out, min = -epsilon_init, max = epsilon_init)) 
+  W
+}
+
+
+debugInitializeWeights = function (fanOut, fanIn)
+{
+  w = matrix(sin(1:(fanOut*(1+fanIn))), fanOut, 1+fanIn)/10
+  return(w)
 }
