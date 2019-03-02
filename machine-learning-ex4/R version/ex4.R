@@ -1,8 +1,10 @@
 ##### Neural Networks - Ex 3, Ex 4 Coursera
 library(tidyverse)
 library(R.matlab)
+source("checkNNGradients.R")
 ###Loading data
 data<-readMat("ex4data1.mat")
+
 X <- data$X
 y <- as.vector(data$y)
 m <- dim(X)[1]
@@ -49,20 +51,39 @@ source("nnCostFunction.R")
 source("aux_functions.R")
 
 ##Cost with lambda = 1
-nnCostFunction(nn_params, input_layer_size, hidden_layer_size, num_labels, 
-                 X, y, 1)
+J<-nnCostFunction(input_layer_size, hidden_layer_size, num_labels, 
+X, y, 1)
+J(nn_params)
 
-
-
-## ================ Part 6: Initializing Pameters ================
+## ================ Initializing Pameters ================
 initial_Theta1<- randInitializeWeights(input_layer_size, hidden_layer_size)
 initial_Theta2<- randInitializeWeights(hidden_layer_size, num_labels)
 
 initial_Theta1_unrolled<-matrix(initial_Theta1, ncol = 1, byrow = F)
 initial_Theta2_unrolled<-matrix(initial_Theta2, ncol = 1, byrow = F)
 
-initial_nn_params<-rbind(initial_Theta1_unrolled,initial_Theta2_unrolled)
+initial_nn_params<-c(initial_Theta1_unrolled,initial_Theta2_unrolled)
 
-# =============== Part 7: Implement Backpropagation ===============#
-source("checkNNGradients.R")
-checkNNGradients(1)
+## ================ Training NN  ================
+
+library(lbfgsb3) #simil fmincg
+costFunction <- nnCostFunction(input_layer_size, hidden_layer_size, 
+                               num_labels, X, y, lambda) 
+
+gradFunction <- nnGradFunction(input_layer_size, hidden_layer_size, 
+                               num_labels, X, y, lambda) 
+opt <- lbfgsb3_(initial_nn_params, fn = costFunction, gr=gradFunction,
+                control = list(trace=1,maxit=50))
+
+
+## Get trained parameters
+nn_params <- opt$prm
+cost <- opt$f
+
+#  Theta1 and Theta2 trained
+Theta1 <- matrix(nn_params[1:(hidden_layer_size * (input_layer_size + 1))],
+                 hidden_layer_size, (input_layer_size + 1))
+
+Theta2 <- matrix(nn_params[(1 + (hidden_layer_size * (input_layer_size + 1))):length(nn_params)],
+                 num_labels, (hidden_layer_size + 1))
+

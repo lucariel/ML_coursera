@@ -11,6 +11,16 @@ roll_into_matrix<-function(v, i, j){
 }
 
 
+
+
+
+
+
+
+
+
+
+
 sigmoid <- function(z){
   g<- 1/(1+exp(1)^(-z))
   return(g)
