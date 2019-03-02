@@ -53,7 +53,7 @@ source("aux_functions.R")
 ##Cost with lambda = 1
 J<-nnCostFunction(input_layer_size, hidden_layer_size, num_labels, 
 X, y, 1)
-J(nn_params)
+J(nn_params)#0.3836783
 
 ## ================ Initializing Pameters ================
 initial_Theta1<- randInitializeWeights(input_layer_size, hidden_layer_size)
