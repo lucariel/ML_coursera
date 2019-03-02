@@ -1,3 +1,4 @@
+##These functions needed to be separated in two distinct for optimization reasons.
 nnCostFunction <- function(input_layer_size, 
                            hidden_layer_size, 
                            num_labels, 
