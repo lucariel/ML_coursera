@@ -44,3 +44,27 @@ debugInitializeWeights = function (fanOut, fanIn)
   w = matrix(sin(1:(fanOut*(1+fanIn))), fanOut, 1+fanIn)/10
   return(w)
 }
+
+
+
+
+
+
+predict <- function(Theta1, Theta2, X){
+  #PREDICT Predict the label of an input given a trained neural network
+  # p = PREDICT(Theta1, Theta2, X) outputs the predicted label of X given the
+  #  trained weights of a neural network (Theta1, Theta2)
+  
+  # Useful values
+  m <- nrow(X)
+  num_labels <- nrow(Theta2)
+  
+  # You need to return the following variables correctly 
+  p <- rep(0, m)
+  
+  h1 <- sigmoid(cbind(1, X) %*% t(Theta1))
+  h2 <- sigmoid(cbind(1, h1) %*% t(Theta2))
+  p <- apply(h2,1,which.max)
+  return(p)
+}
+
