@@ -66,12 +66,15 @@ initial_nn_params<-c(initial_Theta1_unrolled,initial_Theta2_unrolled)
 
 ## ================ Training NN  ================
 
-library(lbfgsb3) #simil fmincg
+lambda <- 1
+##Creating ShortCuts
 costFunction <- nnCostFunction(input_layer_size, hidden_layer_size, 
                                num_labels, X, y, lambda) 
 
 gradFunction <- nnGradFunction(input_layer_size, hidden_layer_size, 
                                num_labels, X, y, lambda) 
+
+source("lbfgsb3_.R") #simil fmincg
 opt <- lbfgsb3_(initial_nn_params, fn = costFunction, gr=gradFunction,
                 control = list(trace=1,maxit=50))
 
@@ -87,3 +90,6 @@ Theta1 <- matrix(nn_params[1:(hidden_layer_size * (input_layer_size + 1))],
 Theta2 <- matrix(nn_params[(1 + (hidden_layer_size * (input_layer_size + 1))):length(nn_params)],
                  num_labels, (hidden_layer_size + 1))
 
+pred <- predict(Theta1, Theta2, X)
+# accuracy
+print(mean(pred==y))
