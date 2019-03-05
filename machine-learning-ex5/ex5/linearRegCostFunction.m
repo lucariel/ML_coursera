@@ -19,13 +19,14 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+predictions = X*theta;
+sqrErrors = (predictions-y).^2;
+regularization = (lambda/(2*m))*(sumsq(theta(2:end,:)));
+J = 1/(2*m)*sum(sqrErrors)+regularization;
+J
 
-
-
-
-
-
-
+ 
+ 
 
 
 
