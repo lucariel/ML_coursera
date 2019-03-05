@@ -23,9 +23,10 @@ predictions = X*theta;
 sqrErrors = (predictions-y).^2;
 regularization = (lambda/(2*m))*(sumsq(theta(2:end,:)));
 J = 1/(2*m)*sum(sqrErrors)+regularization;
-J
-
- 
+J;
+theta_temp = theta;
+theta_temp(1,1)=0;
+grad = grad + (1/m*sum((X*theta- y).* X))'+((lambda/m)*theta_temp);
  
 
 

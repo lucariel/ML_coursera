@@ -74,7 +74,7 @@ costFunction <- nnCostFunction(input_layer_size, hidden_layer_size,
 gradFunction <- nnGradFunction(input_layer_size, hidden_layer_size, 
                                num_labels, X, y, lambda) 
 
-source("lbfgsb3_.R") #simil fmincg
+  source("lbfgsb3_.R") #simil fmincg
 opt <- lbfgsb3_(initial_nn_params, fn = costFunction, gr=gradFunction,
                 control = list(trace=1,maxit=50))
 
