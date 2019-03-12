@@ -15,6 +15,7 @@ linearRegCostFunction_G<-function(X, y, theta, lambda){
   m<-length(y)
   theta_reg <- theta
   theta_reg[1]<-0
-  grad <- 1/m*(sum(t((X%*%theta)-y)%*%X))+lambda/m*theta_reg
+  grad <- (1/m)*t((X%*%theta)-y)%*%X+(lambda/m)*theta_reg
   grad
 }
+
