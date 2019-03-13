@@ -1,0 +1,36 @@
+#linearRegCostFunction#
+
+linearRegCostFunction_J<-function(X, y, lambda){
+  J_func<-function(theta){
+    m <- nrow(X)
+    sqrErrors <- ((X%*%theta)-y)^2
+    J <- 1/(2*m)*sum(sqrErrors)
+    theta_reg <- theta
+    theta_reg<-sum(theta_reg^2)
+    theta_reg[1]<-0
+    reg<-lambda/(2*m)*theta_reg
+    J
+  }
+  
+}
+
+linearRegCostFunction_G<-function(X, y,lambda){
+  grad_func<-function(theta){
+    m<-length(y)
+    theta_reg <- theta
+    theta_reg[1]<-0
+    grad <- (1/m)*t((X%*%theta)-y)%*%X+(lambda/m)*theta_reg
+    grad
+  }
+}
+
+trainLinearReg<-function(X, y, lambda){
+  source("lbfgsb3_.R")
+  incostFunction<-linearRegCostFunction_J(X, y, lambda)
+  ingradFunction<-linearRegCostFunction_G(X, y, lambda)
+  init_theta<-rep(rnorm(1),dim(Xn)[2])
+  opt<-optim(init_theta,incostFunction,ingradFunction )
+  opt$par
+}
+
+  
