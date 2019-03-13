@@ -33,4 +33,20 @@ trainLinearReg<-function(X, y, lambda){
   opt$par
 }
 
-  
+
+learningCurve<-function(X, y, Xval, yval, lambda){
+  m<-dim(X)[1]
+  error_train<-rep(0,m)
+  error_val<-rep(0,m)
+  for (i in (2:m)){
+    X_train <- Xn[1:i,]
+    y_train <- y[1:i]
+    theta_tr<-trainLinearReg(X_train,y_train,lambda)
+    error_train[i]<-linearRegCostFunction_J(X_train,y_train,lambda)(theta_tr)
+    error_val[i]<-linearRegCostFunction_J(Xval,yval,lambda)(theta_tr)
+  }
+  theta_tr
+  errors<-list(error_train,error_val)
+  errors
+}
+

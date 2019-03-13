@@ -27,6 +27,7 @@ as.tibble(X)%>%ggplot(aes(V1, y = y))+
 theta <- c(1,1)
 ##Add x0 to X
 Xn <- cbind( as.vector(matrix(1,1, length(X))),X)
+Xnval<- cbind( as.vector(matrix(1,1, length(Xval))),Xval)
 #=========== Part 2: Regularized Linear Regression Cost =============
 linearRegCostFunction_J(Xn, y, 1)(theta)
 #=========== Part 3: Regularized Linear Regression Gradient =============
@@ -44,4 +45,16 @@ as.tibble(X)%>%ggplot(aes(V1, y = y))+
   ylab("Water flowing out of the damn(y)")+
   geom_abline(slope =thetas_lg[2] ,intercept=thetas_lg[1], color="blue")
 ##=========== Part 5: Learning Curve for Linear Regression =============
-
+error_train<-learningCurve(Xn, y, Xnval, yval, 0)[[1]][-1]
+error_val<-learningCurve(Xn, y, Xnval, yval, 0)[[2]][-1]
+errorplot<-as.tibble(cbind(error_train,error_val, "m"=seq(1:length(error_val))))
+errorplot%>%ggplot()+
+  geom_line(aes(x= m, y = error_val, color = "Cross Validation"))+
+  geom_line(aes(x= m, y = error_train, color = "Train"))+
+  xlab("Number of training examples")+
+  ylab("Error")+ggtitle("Learning Curve for linear regression")+
+  scale_colour_manual("", 
+                      breaks = c("Cross Validation", "Train"),
+                      values = c("green", "blue"))
+  
+  
