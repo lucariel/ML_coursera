@@ -57,4 +57,7 @@ errorplot%>%ggplot()+
                       breaks = c("Cross Validation", "Train"),
                       values = c("green", "blue"))
   
-  
+ #%% =========== Part 6: Feature Mapping for Polynomial Regression =============
+p<-8
+X_poly = polyFeatures(X, p)
+X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)

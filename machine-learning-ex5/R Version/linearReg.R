@@ -50,3 +50,12 @@ learningCurve<-function(X, y, Xval, yval, lambda){
   errors
 }
 
+
+polyFeatures<-function(X,p){
+  X_poly<-X
+  for(i in(2:p)){
+    X_poly<-cbind(X_poly, X_poly[,1]^i)
+  }
+  X_poly
+}
+
