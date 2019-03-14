@@ -18,7 +18,7 @@ Xtest<-data$Xtest
 ytest<-data$ytest
 
 ###Ploting the data
-as.tibble(X)%>%ggplot(aes(V1, y = y))+
+data_plot<-as.tibble(X)%>%ggplot(aes(V1, y))+
   geom_point(shape = 4, color = "red")+
   xlab("Change in water level (x)")+
   ylab("Water flowing out of the damn(y)")
@@ -58,6 +58,44 @@ errorplot%>%ggplot()+
                       values = c("green", "blue"))
   
  #%% =========== Part 6: Feature Mapping for Polynomial Regression =============
+library(BBmisc)  #for normalize() 
+
 p<-8
-X_poly = polyFeatures(X, p)
+
+
+####For total X####
+X_poly <- polyFeatures(X, p)
+#View(X_poly)
+X_poly <-(scale(X_poly))
 X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
+####For Test set ########
+X_poly_test<-polyFeatures(Xtest,p)
+X_poly_test <- scale(X_poly_test)
+X_poly_test <- cbind( as.vector(matrix(1,1, dim(X_poly_test)[1])),X_poly_test)
+####For Cross Validation set ########
+Xval_poly<- polyFeatures(Xval, p)
+Xval_poly<- scale(Xval_poly)
+Xval_poly <- cbind( as.vector(matrix(1,1, dim(Xval_poly)[1])),Xval_poly)
+#=========== Part 7: Learning Curve for Polynomial Regression =============
+theta_poly<-trainLinearReg(X_poly, y, 1)
+
+X_poly <- polyFeatures(X, p)
+X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
+y_hat<-rowSums(X_poly*theta_poly)
+data_plot+geom_smooth(aes(y = y_hat))
+
+################Polynomial Regression Learning Curve################
+
+error_train<-learningCurve(X_poly, y, Xval_poly, yval, 0)[[1]]
+error_val<-learningCurve(X_poly, y, Xval_poly, yval, 0)[[2]]
+
+
+errorplot<-as.tibble(cbind(error_train,error_val, "m"=seq(1:length(error_val))))
+errorplot%>%ggplot()+
+  geom_line(aes(x= m, y = error_val, color = "Cross Validation"))+
+  geom_line(aes(x= m, y = error_train, color = "Train"))+
+  xlab("Number of training examples")+
+  ylab("Error")+ggtitle("Learning Curve for polynomial regression")+
+  scale_colour_manual("", 
+                      breaks = c("Cross Validation", "Train"),
+                      values = c("green", "blue"))

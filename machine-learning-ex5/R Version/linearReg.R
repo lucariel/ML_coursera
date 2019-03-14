@@ -25,10 +25,9 @@ linearRegCostFunction_G<-function(X, y,lambda){
 }
 
 trainLinearReg<-function(X, y, lambda){
-  source("lbfgsb3_.R")
   incostFunction<-linearRegCostFunction_J(X, y, lambda)
   ingradFunction<-linearRegCostFunction_G(X, y, lambda)
-  init_theta<-rep(rnorm(1),dim(Xn)[2])
+  init_theta<-rep(0,dim(X)[2])
   opt<-optim(init_theta,incostFunction,ingradFunction )
   opt$par
 }
@@ -39,7 +38,7 @@ learningCurve<-function(X, y, Xval, yval, lambda){
   error_train<-rep(0,m)
   error_val<-rep(0,m)
   for (i in (2:m)){
-    X_train <- Xn[1:i,]
+    X_train <- X[1:i,]
     y_train <- y[1:i]
     theta_tr<-trainLinearReg(X_train,y_train,lambda)
     error_train[i]<-linearRegCostFunction_J(X_train,y_train,lambda)(theta_tr)
