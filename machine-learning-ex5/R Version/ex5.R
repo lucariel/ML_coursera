@@ -58,7 +58,6 @@ errorplot%>%ggplot()+
                       values = c("green", "blue"))
   
  #%% =========== Part 6: Feature Mapping for Polynomial Regression =============
-library(BBmisc)  #for normalize() 
 
 p<-8
 
@@ -67,27 +66,27 @@ p<-8
 X_poly <- polyFeatures(X, p)
 #View(X_poly)
 X_poly <-(scale(X_poly))
-X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
+#X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
 ####For Test set ########
 X_poly_test<-polyFeatures(Xtest,p)
 X_poly_test <- scale(X_poly_test)
-X_poly_test <- cbind( as.vector(matrix(1,1, dim(X_poly_test)[1])),X_poly_test)
+#X_poly_test <- cbind( as.vector(matrix(1,1, dim(X_poly_test)[1])),X_poly_test)
 ####For Cross Validation set ########
 Xval_poly<- polyFeatures(Xval, p)
 Xval_poly<- scale(Xval_poly)
-Xval_poly <- cbind( as.vector(matrix(1,1, dim(Xval_poly)[1])),Xval_poly)
+#Xval_poly <- cbind( as.vector(matrix(1,1, dim(Xval_poly)[1])),Xval_poly)
 #=========== Part 7: Learning Curve for Polynomial Regression =============
 theta_poly<-trainLinearReg(X_poly, y, 1)
 
-X_poly <- polyFeatures(X, p)
-X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
-y_hat<-rowSums(X_poly*theta_poly)
+X_polyn <- polyFeatures(X, p)
+X_polyn <- cbind( as.vector(matrix(1,1, dim(X_polyn)[1])),X_polyn)
+y_hat<-rowSums(X_polyn*theta_poly)
 data_plot+geom_smooth(aes(y = y_hat))
 
 ################Polynomial Regression Learning Curve################
 
-error_train<-learningCurve(X_poly, y, Xval_poly, yval, 0)[[1]]
-error_val<-learningCurve(X_poly, y, Xval_poly, yval, 0)[[2]]
+error_train<-learningCurve(X_poly, y, Xval_poly, yval, 2)[[1]][-1]
+error_val<-learningCurve(X_poly, y, Xval_poly, yval, 1)[[2]][-1]
 
 
 errorplot<-as.tibble(cbind(error_train,error_val, "m"=seq(1:length(error_val))))
@@ -99,3 +98,29 @@ errorplot%>%ggplot()+
   scale_colour_manual("", 
                       breaks = c("Cross Validation", "Train"),
                       values = c("green", "blue"))
+
+
+# =========== Part 8: Validation for Selecting Lambda =============
+X_poly <- polyFeatures(X, p)
+X_poly <-(scale(X_poly))
+X_poly <- cbind( as.vector(matrix(1,1, dim(X_poly)[1])),X_poly)
+Xval_poly<- polyFeatures(Xval, p)
+Xval_poly<- scale(Xval_poly)
+Xval_poly <- cbind( as.vector(matrix(1,1, dim(Xval_poly)[1])),Xval_poly)
+
+
+sel_lambda<-validationCurve(X_poly, y,Xval_poly,yval)
+lambdas<-sel_lambda[[1]]
+error_train_l<-sel_lambda[[2]]
+error_val_l<-sel_lambda[[3]]
+
+plot_sel_lambda_data<-as.tibble(cbind(lambdas,error_train_l,error_val_l))
+plot_sel_lambda_data%>%ggplot()+
+  geom_line(aes(x= lambdas, y = error_val_l, color = "Cross Validation"))+
+  geom_line(aes(x= lambdas, y = error_train_l, color = "Train"))+
+  xlab("Number of training examples")+
+  ylab("Error")+ggtitle("Lambda Selection")+
+  scale_colour_manual("", 
+                      breaks = c("Cross Validation", "Train"),
+                      values = c("green", "blue"))
+

@@ -6,10 +6,12 @@ linearRegCostFunction_J<-function(X, y, lambda){
     sqrErrors <- ((X%*%theta)-y)^2
     J <- 1/(2*m)*sum(sqrErrors)
     theta_reg <- theta
-    theta_reg<-sum(theta_reg^2)
+    theta_reg<-(theta_reg^2)
     theta_reg[1]<-0
-    reg<-lambda/(2*m)*theta_reg
-    J
+    theta_reg<-sum(theta_reg)
+    reg<-(lambda/(2*m))*theta_reg
+    J<-J+reg
+    return(J)
   }
   
 }
@@ -56,5 +58,21 @@ polyFeatures<-function(X,p){
     X_poly<-cbind(X_poly, X_poly[,1]^i)
   }
   X_poly
+}
+
+
+
+validationCurve<-function(X, y, Xval, yval){
+  lambda_vec<-c(0,0.001,0.003,0.01,0.03,0.1,0.3,1,3,10)
+  m<-length(lambda_vec)
+  error_train<-rep(0,m)
+  error_val<-rep(0,m)
+  for(i in 1:m){
+    theta_tr<-trainLinearReg(X,y,lambda_vec[i])
+    error_train[i]<-linearRegCostFunction_J(X,y,lambda_vec[i])(theta_tr)
+    error_val[i]<-linearRegCostFunction_J(Xval,yval,lambda_vec[i])(theta_tr)
+  }
+  errors<-list(lambda_vec,error_train,error_val)
+  errors
 }
 
