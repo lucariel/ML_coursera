@@ -20,14 +20,17 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
-
-
-
-
-
+for i = 1:size(X)(1)
+  %dif = X(i,:)-centroids;
+  ks = zeros(K,1);
+  for k = 1:K
+    ks(k) = sumsq(norm((X(i,:)-centroids)(k,:)));
+  endfor
+  [q,w] =min(ks);
+  idx(i) = w;
+endfor
 
 % =============================================================
-
+idx;
 end
 
